@@ -1,83 +1,133 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-    <title>Hand Drip Coffee calculator</title>
+    <title>Tetsu Kasuya’s 4:6 Pour Over Method Calculator</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
 </head>
+
 <body>
+    <div class="container">
+        <h2 class="text-center mt-5">Tetsu Kasuya’s 4:6 Pour Over Method Calculator</h2>
 
-<div class="container">
-    <h2 class="text-center mt-5">Hand Drip Coffee Calculator</h2>
+        <form class="m-5">
+            <div class="form-group">
+                <label for="coffeeGrounds">Dosage (g):
+                    <span id="coffeeGroundsValue" class="badge badge-secondary"></span>
+                </label>
+                <input type="range" class="custom-range" min="10" max="30" value="15" id="coffeeGrounds"
+                    name="coffeeGrounds">
+            </div>
 
-    <form class="m-5">
-        <div class="form-group">
-            <label for="coffeeGrounds">Coffee Grounds in grams: 
-                <span id="coffeeGroundsValue" class="badge badge-secondary"></span>
-            </label>
-            <input type="range" class="custom-range" min="1" max="100" value="15" id="coffeeGrounds" name="coffeeGrounds">
-        </div>
+            <div class="form-group">
+                <label for="brewRatio">Brew Ratio:
+                    <span id="brewRatioValue" class="badge badge-secondary"></span>
+                </label>
+                <input type="range" class="custom-range" min="10" max="20" value="15" id="brewRatio" name="brewRatio">
+            </div>
+            <h5 id="totalAmount"></h5>
+        </form>
 
-        <div class="form-group">
-            <label for="brewRatio">Brew Ratio: 
-                <span id="brewRatioValue" class="badge badge-secondary"></span>
-            </label>
-            <input type="range" class="custom-range" min="1" max="20" value="15" id="brewRatio" name="brewRatio">
-        </div>
-    </form>
 
-    <div id="result" class="row"></div>
-</div>
+        <h4>First 40%</h4>
+        <div id="first_40" class="row"></div>
+        <h4>Final 60%</h4>
+        <div id="final_60" class="row"></div>
+    </div>
 
-<script>
-    document.getElementById('coffeeGrounds').addEventListener('input', function() {
-        calcPours(this.value, document.getElementById('brewRatio').value);
-    });
+    <script>
+        document.getElementById('coffeeGrounds').addEventListener('input', function () {
+            calcPours(this.value, document.getElementById('brewRatio').value);
+        });
 
-    document.getElementById('brewRatio').addEventListener('input', function() {
-        calcPours(document.getElementById('coffeeGrounds').value, this.value);
-    });
+        document.getElementById('brewRatio').addEventListener('input', function () {
+            calcPours(document.getElementById('coffeeGrounds').value, this.value);
+        });
 
-    function calcPours(coffeeGrounds, brewRatio) {
-        document.getElementById('coffeeGroundsValue').innerText = coffeeGrounds + 'g';
-        document.getElementById('brewRatioValue').innerText = '1:' + brewRatio;
-        
-        if (coffeeGrounds && brewRatio) {
-            var totalWater = coffeeGrounds * brewRatio;
+        function calcPours(coffeeGrounds, brewRatio) {
+            document.getElementById('coffeeGroundsValue').innerText = coffeeGrounds + 'g';
+            document.getElementById('brewRatioValue').innerText = '1:' + brewRatio;
 
-            var resultHTML = '';
-            
-            var firstPour1 = (2/7 * totalWater).toFixed(2); // adjust the pour sizes to totals
-            var secondPour1 = (5/7 * totalWater).toFixed(2);
-            resultHTML += createResultCard('Sweetness', firstPour1, secondPour1);
-            
-            var firstPour2 = (1/2 * totalWater).toFixed(2);
-            var secondPour2 = (1/2 * totalWater).toFixed(2);
-            resultHTML += createResultCard('Balanced Flavour', firstPour2, secondPour2);
-            
-            var firstPour3 = (2/3 * totalWater).toFixed(2);
-            var secondPour3 = (1/3 * totalWater).toFixed(2);
-            resultHTML += createResultCard('Acidic Flavour', firstPour3, secondPour3);
-            
-            document.getElementById('result').innerHTML = resultHTML;
-        } else {
-            document.getElementById('result').innerHTML = "<div class='alert alert-danger col-12' role='alert'>Please input the amount of coffee grounds and brew ratio.</div>";
+            if (coffeeGrounds && brewRatio) {
+                var totalWater = Math.round(coffeeGrounds * brewRatio);
+                document.getElementById('totalAmount').innerText = "Total amount to pour: " + totalWater + "g";
+                
+                // --------------------------------
+                
+                var first_40 = '';
+                
+                var pct_40 = totalWater * 0.4;
+                var sweetness = [(pct_40 / 3).toFixed(), (pct_40 / 3 * 2).toFixed()].map(Math.round);
+                first_40 += createResultCard('Sweetness', sweetness, totalWater);
+                
+                var balanced = [(pct_40 / 2).toFixed(), (pct_40 / 2).toFixed()].map(Math.round);
+                first_40 += createResultCard('Balanced', balanced, totalWater);
+                
+                var acidic = [(pct_40 / 3 * 2).toFixed(), (pct_40 / 3).toFixed()].map(Math.round);
+                first_40 += createResultCard('Acidic', acidic, totalWater);
+                
+                document.getElementById('first_40').innerHTML = first_40;
+                
+                // --------------------------------
+
+                var final_60 = '';
+
+                var pct_60 = totalWater * 0.6;
+                var normal = splitIntoN(pct_60, 3).map(Math.round);
+                final_60 += createResultCard('Normal strength', normal, totalWater);
+                
+                var high = splitIntoN(pct_60, 4).map(Math.round);
+                final_60 += createResultCard('High strength', high, totalWater);
+
+                var low = splitIntoN(pct_60, 2).map(Math.round);
+                final_60 += createResultCard('Low strength', low, totalWater);
+                
+                document.getElementById('final_60').innerHTML = final_60;
+                
+            } else {
+                document.getElementById('first_40').innerHTML =
+                    "<div class='alert alert-danger col-12' role='alert'>Please input the amount of coffee grounds and brew ratio.</div>";
+                document.getElementById('final_60').innerHTML =
+                    "<div class='alert alert-danger col-12' role='alert'>Please input the amount of coffee grounds and brew ratio.</div>";
+            }
         }
-    }
-    
-    function createResultCard(title, firstPour, secondPour) {
-        var totalPour = parseFloat(firstPour) + parseFloat(secondPour);
-        var resultHTML = "<div class='col-sm-4 mb-4'>";
-        resultHTML += "<div class='card h-100'>";
-        resultHTML += "<div class='card-header'>" + title + "</div>";
-        resultHTML += "<div class='card-body'>";
-        resultHTML += "<p class='card-text'>First pour: " + firstPour + "g.<br>Second pour: " + secondPour + "g.<br><strong>Total: " + totalPour.toFixed(2) + "g.</strong></p>";
-        resultHTML += "</div></div></div>";
-        return resultHTML;
-    }
 
-    // Initial calculation on page load
-    calcPours(document.getElementById('coffeeGrounds').value, document.getElementById('brewRatio').value);
-</script>
+        function splitIntoN(amount, n) {
+            var eachPour = Math.round(amount / n);
+            var pours = Array(n).fill(eachPour);
+            
+            // If the amounts don't add up exactly due to rounding, adjust the last element
+            var total = pours.reduce((a, b) => a + b, 0);
+            if (total != amount) {
+                pours[n - 1] += amount - total;
+            }
+            
+            return pours;
+        }
+
+        function createResultCard(title, pours, totalPour) {
+            var accumulated = 0;
+            var resultHTML = "<div class='col-sm-4 mb-4'>";
+            resultHTML += "<div class='card h-100'>";
+            resultHTML += "<div class='card-header'>" + title + "</div>";
+            resultHTML += "<div class='card-body'>";
+            resultHTML += "<table class='table'>";
+            resultHTML += "<tr><th></th><th>Amount</th><th>Total</th></tr>";
+            for (let i = 0; i < pours.length; i++) {
+                accumulated += pours[i];
+                if (pours[i] != 0) {
+                    resultHTML += "<tr><td>Pour " + (i + 1) + ":</td><td>" + pours[i] + "g</td><td>" + accumulated +
+                        "g</td></tr>";
+                }
+            }
+            resultHTML += "</table>";
+            resultHTML += "</div></div></div>";
+            return resultHTML;
+        }
+
+        // Initial calculation on page load
+        calcPours(document.getElementById('coffeeGrounds').value, document.getElementById('brewRatio').value);
+    </script>
 
 </body>
 </html>
