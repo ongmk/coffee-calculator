@@ -4,7 +4,7 @@
 <head>
     <title>Tetsu Kasuya’s 4:6 Pour Over Method Calculator</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
 </head>
 
 <body>
@@ -59,13 +59,13 @@
                 
                 var pct_40 = totalWater * 0.4;
                 var sweetness = [(pct_40 / 3).toFixed(), (pct_40 / 3 * 2).toFixed()].map(Math.round);
-                first_40 += createResultCard('Sweetness', sweetness, totalWater);
+                first_40 += createResultCard('Sweetness', sweetness);
                 
                 var balanced = [(pct_40 / 2).toFixed(), (pct_40 / 2).toFixed()].map(Math.round);
-                first_40 += createResultCard('Balanced', balanced, totalWater);
+                first_40 += createResultCard('Balanced', balanced);
                 
                 var acidic = [(pct_40 / 3 * 2).toFixed(), (pct_40 / 3).toFixed()].map(Math.round);
-                first_40 += createResultCard('Acidic', acidic, totalWater);
+                first_40 += createResultCard('Acidic', acidic);
                 
                 document.getElementById('first_40').innerHTML = first_40;
                 
@@ -75,13 +75,13 @@
 
                 var pct_60 = totalWater * 0.6;
                 var normal = splitIntoN(pct_60, 3).map(Math.round);
-                final_60 += createResultCard('Normal strength', normal, totalWater);
+                final_60 += createResultCard('Normal strength', normal, pct_40);
                 
                 var high = splitIntoN(pct_60, 4).map(Math.round);
-                final_60 += createResultCard('High strength', high, totalWater);
+                final_60 += createResultCard('High strength', high, pct_40);
 
                 var low = splitIntoN(pct_60, 2).map(Math.round);
-                final_60 += createResultCard('Low strength', low, totalWater);
+                final_60 += createResultCard('Low strength', low, pct_40);
                 
                 document.getElementById('final_60').innerHTML = final_60;
                 
@@ -106,8 +106,7 @@
             return pours;
         }
 
-        function createResultCard(title, pours, totalPour) {
-            var accumulated = 0;
+        function createResultCard(title, pours, accumulated = 0) {
             var resultHTML = "<div class='col-sm-4 mb-4'>";
             resultHTML += "<div class='card h-100'>";
             resultHTML += "<div class='card-header'>" + title + "</div>";
