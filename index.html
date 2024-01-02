@@ -4,7 +4,9 @@
 <head>
     <title>Tetsu Kasuya’s 4:6 Pour Over Method Calculator</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="dark-theme.css" rel="stylesheet">
     <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <link rel="manifest" href="manifest.json" />
 </head>
 
 <body>
@@ -24,16 +26,17 @@
                 <label for="brewRatio">Brew Ratio:
                     <span id="brewRatioValue" class="badge badge-secondary"></span>
                 </label>
-                <input type="range" class="custom-range" min="10" max="20" value="15" id="brewRatio" name="brewRatio">
+                <input type="range" class="custom-range" min="10" max="20" value="16" id="brewRatio" name="brewRatio">
             </div>
             <h5 id="totalAmount"></h5>
         </form>
 
 
         <h4>First 40%</h4>
-        <div id="first_40" class="row"></div>
+        <div id="first_40"></div>
+        </br>
         <h4>Final 60%</h4>
-        <div id="final_60" class="row"></div>
+        <div id="final_60"></div>
     </div>
 
     <script>
@@ -67,7 +70,7 @@
                 var acidic = [(pct_40 / 3 * 2).toFixed(), (pct_40 / 3).toFixed()].map(Math.round);
                 first_40 += createResultCard('Acidic', acidic);
                 
-                document.getElementById('first_40').innerHTML = first_40;
+                document.getElementById('first_40').innerHTML = `<div class="row flex-row flex-nowrap overflow-auto">${first_40}</div>`;
                 
                 // --------------------------------
 
@@ -83,13 +86,13 @@
                 var low = splitIntoN(pct_60, 2).map(Math.round);
                 final_60 += createResultCard('Low strength', low, pct_40);
                 
-                document.getElementById('final_60').innerHTML = final_60;
+                document.getElementById('final_60').innerHTML = `<div class="row flex-row flex-nowrap overflow-auto">${final_60}</div>`;
                 
             } else {
                 document.getElementById('first_40').innerHTML =
-                    "<div class='alert alert-danger col-12' role='alert'>Please input the amount of coffee grounds and brew ratio.</div>";
+                    "<div class='alert alert-danger col-12 row flex-row flex-nowrap overflow-auto' role='alert'>Please input the amount of coffee grounds and brew ratio.</div>";
                 document.getElementById('final_60').innerHTML =
-                    "<div class='alert alert-danger col-12' role='alert'>Please input the amount of coffee grounds and brew ratio.</div>";
+                    "<div class='alert alert-danger col-12 row flex-row flex-nowrap overflow-auto' role='alert'>Please input the amount of coffee grounds and brew ratio.</div>";
             }
         }
 

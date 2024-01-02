@@ -1,0 +1,35 @@
+body {
+    background-color: #343a40;
+    color: #f8f9fa;
+}
+
+.card {
+    background-color: #495057;
+}
+
+.card-header {
+    background-color: #212529;
+    color: #f8f9fa;
+}
+
+.table {
+    color: #f8f9fa;
+}
+
+.badge {
+    color: #212529;
+    background-color: #f8f9fa;
+}
+
+.alert {
+    color: #212529;
+    background-color: #f8f9fa;
+}
+
+.row.flex-nowrap {
+    overflow-x: auto;
+}
+
+.row.flex-nowrap > .col-sm-4 {
+    flex: 0 0 auto;
+}
