@@ -97,13 +97,14 @@
         }
 
         function splitIntoN(amount, n) {
-            var eachPour = Math.round(amount / n);
+            var roundedAmount = Math.round(amount)
+            var eachPour = Math.round(roundedAmount / n);
             var pours = Array(n).fill(eachPour);
             
             // If the amounts don't add up exactly due to rounding, adjust the last element
             var total = pours.reduce((a, b) => a + b, 0);
-            if (total != amount) {
-                pours[n - 1] += amount - total;
+            if (total != roundedAmount) {
+                pours[n - 1] += roundedAmount - total;
             }
             
             return pours;
@@ -119,7 +120,7 @@
             for (let i = 0; i < pours.length; i++) {
                 accumulated += pours[i];
                 if (pours[i] != 0) {
-                    resultHTML += "<tr><td>Pour " + (i + 1) + ":</td><td>" + pours[i] + "g</td><td>" + accumulated +
+                    resultHTML += "<tr><td>Pour " + (i + 1) + ":</td><td>" + pours[i] + "g</td><td>" + Math.round(accumulated) +
                         "g</td></tr>";
                 }
             }
