@@ -1,0 +1,26 @@
+body {
+  --bs-body-bg: #343a40;
+  --bs-body-color: #f8f9fa;
+}
+
+.card {
+  background-color: #495057;
+}
+
+.badge {
+  background-color: #495057;
+}
+
+.table {
+  --bs-table-bg: transparent;
+  --bs-table-color: #f8f9fa;
+}
+
+.small-card {
+  width: 400px;
+}
+
+.card-header {
+  background-color: #212529;
+  color: #f8f9fa;
+}
