@@ -16,8 +16,13 @@ body {
   --bs-table-color: #f8f9fa;
 }
 
+.scroll-container {
+  scroll-snap-type: x mandatory;
+}
+
 .small-card {
-  width: 400px;
+  width: 350px;
+  scroll-snap-align: start;
 }
 
 .card-header {
